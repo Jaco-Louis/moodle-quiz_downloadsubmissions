@@ -32,11 +32,12 @@ $string['nosubmission'] = 'No submissions found.';
 $string['pluginname'] = 'Download essay submissions';
 $string['plugindescription'] = 'Download files submitted by all students (all attempts) as attachments in response to quiz essay questions.<br><br>';
 $string['reportdownloadsubmissions'] = 'Download submissions report';
-$string['setpreferences'] = 'Set preferences';
-$string['setfolderhierarchy'] = 'Set folder hierarchy';
-$string['essayquestionwise'] = 'Essay question wise';
-$string['userattemptwise'] = 'User attempt wise';
-$string['includetextresponsefile'] = 'Include text response file';
-$string['includequestiontextfile'] = 'Include question text file';
-// PRIVACY.
-$string['privacy:metadata'] = 'The quiz download submissions plugin does not store any personal data about any user.';
+$string['preferences'] = 'Set preferences';
+$string['nomarksheet'] = 'Please make sure that all is in order with the marking worksheet that should have been downloaded already  
+    (Go the assignment and use the option DOWNLOAD GRADING WORKSHEET at the VIEW ALL SUBMISSIONS screen).';
+$string['targetassigndescription'] = 'Please choose to which specific assignment activity the marked answers will be loaded 
+    back to. PS. First download the specific assignments grading worksheet:';
+$string['gradingworksheetconfirm'] = 'I confirm that I have already downloaded the grading worksheet of the abovenamed assignment:';
+$string['choose'] = 'Choose...';
+$string['positive'] = 'Yes';
+$string['negative'] = 'No';

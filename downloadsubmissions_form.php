@@ -35,6 +35,7 @@ defined('MOODLE_INTERNAL') || die();
  */
 
 require_once("$CFG->libdir/formslib.php");
+require_once($CFG->dirroot . '/mod/quiz/report/attemptsreport.php');
 
 class quiz_downloadsubmissions_settings_form extends moodleform {
 
@@ -43,6 +44,7 @@ class quiz_downloadsubmissions_settings_form extends moodleform {
      */
 	public function definition() {
 		global $CFG;
+		global $course;
 
 		$mform = $this->_form;
 		$mform->addElement('hidden', 'id', '');
@@ -54,16 +56,34 @@ class quiz_downloadsubmissions_settings_form extends moodleform {
 // 		$mform->addElement('header', 'preferencespage',
 // 		        get_string('reportwhattoinclude', 'quiz'));
 
-		$mform->addElement('header', 'preferencespage',
-		        get_string('setpreferences', 'quiz_downloadsubmissions'));
+		$mform->addElement('header', 'preferencespage', get_string('preferences', 'quiz_downloadsubmissions'));
 
-		$mform->addElement('select', 'folders', get_string('setfolderhierarchy', 'quiz_downloadsubmissions'), array(
-		        'questionwise'    => get_string('essayquestionwise', 'quiz_downloadsubmissions'),
-		        'attemptwise'     => get_string('userattemptwise', 'quiz_downloadsubmissions'),
+		// Eugene W Steyn (Akademia)
+		// Die teiken opdrag moet eers deur die gebruiker geskep wees en die gebruiker moet ook eers 'n
+		// offline grading worksheet aflaai. Kry 'n lys van al die opdragte in die kursus
+		$activitieslist = get_array_of_activities($course->id);
+		foreach($activitieslist as $assignmentlist) {
+			if (($assignmentlist->mod) == 'assign') {
+				$assignmentmenu[$assignmentlist->id] = ($assignmentlist->name)/*. ' (id=' . ($assignmentlist->id).')'*/;
+			}
+		}
+		$mform->addElement('select', 'targetassign', get_string('targetassigndescription', 'quiz_downloadsubmissions'),
+		    $assignmentmenu);
+		$mform->addElement('select', 'gradingworksheet', get_string('gradingworksheetconfirm', 'quiz_downloadsubmissions'),
+			array(
+			'0'	  => get_string('choose', 'quiz_downloadsubmissions'),
+			'1'   => get_string('positive', 'quiz_downloadsubmissions'),
+			'2'   => get_string('negative', 'quiz_downloadsubmissions'),
 		));
 
-// 		$mform->addElement('selectyesno', 'textresponse',
-// 		        'Include text response');
+		// Eugene W Steyn (Akademia) Ons benodig nie die vouers, vraagteks en antwoordteks nie.
+		$mform->addElement('select', 'folders', 'Set folder hierarchy', array(
+		        'questionwise'    => 'Essay question wise',
+		        'attemptwise'     => 'User attempt wise',
+		));
+
+ 		$mform->addElement('selectyesno', 'textresponse',
+ 		        'Include text response');
 
 		$mform->addElement('select', 'textresponse', get_string('includetextresponsefile', 'quiz_downloadsubmissions'), array(
 		        '1'   => get_string('yes'),
@@ -75,7 +95,7 @@ class quiz_downloadsubmissions_settings_form extends moodleform {
 		        '0'   => get_string('no'),
 		));
 
-// 		$mform->addElement('submit', 'downloadsubmissions', get_string('downloadsubmissions', 'quiz_downloadsubmissions'));
+ 		$mform->addElement('submit', 'downloadsubmissions', get_string('downloadsubmissions', 'quiz_downloadsubmissions'));
 		$mform->addElement('submit', 'downloadsubmissions', get_string('download'));
 	}
 }
