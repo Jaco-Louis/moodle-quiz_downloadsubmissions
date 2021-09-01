@@ -266,18 +266,18 @@ class quiz_downloadsubmissions_report extends quiz_attempts_report {
     		// Construct download folder name.
     		$userid = $student->userid;
     		$questionid = 'Q' . $student->slot;   // Or use slot number from {quiz_slots} table.
-			/* Eugene : Ons gebruik nie die eksta vouers se naam nie
-    		//$prefix1 = str_replace('_', ' ', $questionid);
+			//Eugene : Ons gebruik nie die eksta vouers se naam nie
+    		$prefix1 = str_replace('_', ' ', $questionid);
 
-    		//$prefix2 = '';
-    		//if(!empty($student->idnumber)) {
-    		//	$prefix2 .= $student->idnumber;
-    		//} else {
-    		//	$prefix2 .= $student->username;
-    		//}
-    		//$prefix2 .= ' - ' . str_replace('_', ' ', fullname($student)) . ' - ' .
-			//    'Attempt' . $student->userattemptnum . ' - '. date("Y-m-d g_i a", $student->timestart);
-			*/
+    		$prefix2 = '';
+    		if(!empty($student->idnumber)) {
+    			$prefix2 .= $student->idnumber;
+    		} else {
+    			$prefix2 .= $student->username;
+    		}
+    		$prefix2 .= ' - ' . str_replace('_', ' ', fullname($student)) . ' - ' .
+			    'Attempt' . $student->userattemptnum . ' - '. date("Y-m-d g_i a", $student->timestart);
+
 
 			//Eugene W Steyn (Akademia)
 			// kry die unieke id wat genereer word vir die opdrag en student - doen ook 'n kontrole dat al die indienings 'n
@@ -301,11 +301,11 @@ class quiz_downloadsubmissions_report extends quiz_attempts_report {
 
     		if ($qa->get_question()->get_type_name() == 'essay') {
     		    $questionname = $qa->get_question()->name;
-    		    //$prefix1 .= ' - ' . $questionname;
+    		    $prefix1 .= ' - ' . $questionname;
 
     		    $qa->get_question();  // Question object. (Has qt related info like responserequired, attachmentsrequired etc.)
 
-				/* Eugene W Steyn (Akademia) Ons benodig nie die teks van die vraag nie
+				//Eugene W Steyn (Akademia) Ons benodig nie die teks van die vraag nie
     		    // Writing question text to a file.
     		    $questiontextfile = null;
     		    if ($data->questiontext == 1) {
@@ -339,16 +339,16 @@ class quiz_downloadsubmissions_report extends quiz_attempts_report {
 	                        $qttextfileinfo['filepath'],
 	                        $qttextfileinfo['filename']);
         		    }
-    		    }*/
+    		    }
 
-				/* Eugene W Steyn (Akademia) Ons benodig nie die teks van die antwoordboksie nie
+				//Eugene W Steyn (Akademia) Ons benodig nie die teks van die antwoordboksie nie
     		    // Writing text response to a file.
     		    $textfile = null;
     		    $hastextresponse = false;
     		    if ($data->textresponse == 1) {
         		    if (!empty($qa->get_response_summary())) {
         		        $hastextresponse = true;
-        		        $textfilename = $prefix1 . ' - ' . $prefix2 . ' - ' . 'textresponse';
+        		        $textfilename = $prefix1 . ' - ' . $prefix2 . ' - ' . 'textresponse.txt';
         		        $textfileinfo = array (
         		                'contextid' => $context->id,
         		                'component' => 'quiz_downloadsubmissions',
@@ -375,7 +375,7 @@ class quiz_downloadsubmissions_report extends quiz_attempts_report {
                             $textfileinfo['filepath'],
                             $textfileinfo['filename']);
         		    }
-    		    }*/
+    		    }
 
     		    // Fetching attachments.
     			$name = 'attachments';
@@ -401,16 +401,16 @@ class quiz_downloadsubmissions_report extends quiz_attempts_report {
     				$files = array();
     			}
 
-				/*Eugene W Steyn (Akademia) Haal ekstra vouers uit
+				//Eugene W Steyn (Akademia) Haal ekstra vouers uit
     			// Set the download folder hierarchy.
-    			if ($data->folders == 'questionwise') {
+    			if ($data->folders == 1) {
         			$prefixedfilename = clean_filename($prefix1 . '/' . $prefix2);
         			$pathprefix = $prefix1 . '/' . $prefix2;
 
-    			} else if ($data->folders == 'attemptwise') {
+    			} else if ($data->folders == 0) {
     			    $prefixedfilename = clean_filename($prefix2 . '/' . $prefix1);
     			    $pathprefix = $prefix2 . '/' . $prefix1;
-    			}*/
+    			}
 				//Eugene W Steyn (Akademia) Haal ekstra vouers uit
 				$pathprefix = '';
 
@@ -425,12 +425,12 @@ class quiz_downloadsubmissions_report extends quiz_attempts_report {
 	    			$pathfilename = clean_param($pathfilename, PARAM_PATH);
 	    			$filesforzipping[$pathfilename] = $file;
 	    		}
-				/*Eugene W Steyn (Akademia) Haal teks antwoorde en teks vrae uit zip lêer
+				//Eugene W Steyn (Akademia) Haal teks antwoorde en teks vrae uit zip lêer
 	    		// II. File containing text response.
 	    		if ($textfile) {
 	    		    $zipfilename = $textfile->get_filename();
 // 	    		    $pathfilename = $pathprefix . $textfile->get_filepath() . $prefix3 . $zipfilename;
-	    		    $pathfilename = $pathprefix . $textfile->get_filepath() . $prefix3 . 'textresponse';
+	    		    $pathfilename = $pathprefix . $textfile->get_filepath() . $prefix3 . 'textresponse.txt';
 	    		    $pathfilename = clean_param($pathfilename, PARAM_PATH);
 	    		    $filesforzipping[$pathfilename] = $textfile;
 	    		}
@@ -441,15 +441,15 @@ class quiz_downloadsubmissions_report extends quiz_attempts_report {
     	    		    $zipfilename = $questiontextfile->get_filename();
     // 	    		    $pathfilename = $pathprefix . $textfile->get_filepath() . $prefix3 . $zipfilename;
 
-    	    		    if ($data->folders == 'questionwise') {
-    	    		        $pathfilename = $prefix1 . $questiontextfile->get_filepath() . 'Question text';
-    	    		    } else if ($data->folders == 'attemptwise') {
-    	    		        $pathfilename = $pathprefix . $questiontextfile->get_filepath() . 'Question text';
+    	    		    if ($data->folders == 1) {
+    	    		        $pathfilename = $prefix1 . $questiontextfile->get_filepath() . 'Question text.txt';
+    	    		    } else if ($data->folders == 0) {
+    	    		        $pathfilename = $pathprefix . $questiontextfile->get_filepath() . 'Question text.txt';
     	    		    }
     	    		    $pathfilename = clean_param($pathfilename, PARAM_PATH);
     	    		    $filesforzipping[$pathfilename] = $questiontextfile;
     	    		}
-	    		}*/
+	    		}
     		}
     	}
 

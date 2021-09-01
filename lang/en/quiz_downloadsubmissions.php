@@ -41,3 +41,7 @@ $string['gradingworksheetconfirm'] = 'I confirm that I have already downloaded t
 $string['choose'] = 'Choose...';
 $string['positive'] = 'Yes';
 $string['negative'] = 'No';
+$string['includequestiontextfile'] = 'Include question text file';
+$string['questionwise'] = 'Essay question wise';
+$string['attemptwise'] = 'User attempt wise';
+$string['includetextresponsefile'] = 'Set folder hierarchy';

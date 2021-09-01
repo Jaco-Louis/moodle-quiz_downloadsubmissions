@@ -77,9 +77,9 @@ class quiz_downloadsubmissions_settings_form extends moodleform {
 		));
 
 		// Eugene W Steyn (Akademia) Ons benodig nie die vouers, vraagteks en antwoordteks nie.
-		$mform->addElement('select', 'folders', 'Set folder hierarchy', array(
-		        'questionwise'    => 'Essay question wise',
-		        'attemptwise'     => 'User attempt wise',
+		$mform->addElement('select', 'folders', get_string('includetextresponsefile', 'quiz_downloadsubmissions'), array(
+		        '1'    => get_string('questionwise', 'quiz_downloadsubmissions'),
+		        '0'     => get_string('attemptwise', 'quiz_downloadsubmissions'),
 		));
 
  		$mform->addElement('selectyesno', 'textresponse',
@@ -96,6 +96,6 @@ class quiz_downloadsubmissions_settings_form extends moodleform {
 		));
 
  		$mform->addElement('submit', 'downloadsubmissions', get_string('downloadsubmissions', 'quiz_downloadsubmissions'));
-		$mform->addElement('submit', 'downloadsubmissions', get_string('download'));
+		//$mform->addElement('submit', 'downloadsubmissions', get_string('download'));
 	}
 }

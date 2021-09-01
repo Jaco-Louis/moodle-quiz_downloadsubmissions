@@ -44,3 +44,7 @@ $string['gradingworksheetconfirm'] = 'Ek bevestig ek het die bostaande opdrag se
 $string['choose'] = 'Kies...';
 $string['positive'] = 'Ja';
 $string['negative'] = 'Nee';
+$string['includequestiontextfile'] = 'Sluit vrae dokument in';
+$string['questionwise'] = 'Volgens vrae';
+$string['attemptwise'] = 'Volgens gebruikers';
+$string['includetextresponsefile'] = 'Hoe moet die dokumente groepeer word';
